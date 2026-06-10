@@ -1,9 +1,8 @@
-import { Twitter } from '@boxicons/react';
 import ChatBotStart from './components/ChatBotStart';
 
 const App = () => {
   return (
-    <div>
+    <div className='w-full h-dvh grid place-items-center bg-bg-primary text-text-primary'>
       <ChatBotStart />
     </div>
   );
