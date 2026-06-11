@@ -1,4 +1,4 @@
-const ChatBotApp = () => {
+const ChatBotApp = ({ onGoBack }) => {
   const tempActive = true;
   return (
     <div className="flex h-full w-full">
@@ -37,7 +37,9 @@ const ChatBotApp = () => {
           <h3 className="font-exo text-xl font-bold tracking-wide uppercase">
             chat with ai
           </h3>
-          <i className="fa-solid fa-arrow-right cursor-pointer text-3xl"></i>
+          <div onClick={onGoBack}>
+            <i className="fa-solid fa-arrow-right cursor-pointer text-3xl"></i>
+          </div>
         </div>
 
         {/* chat */}
