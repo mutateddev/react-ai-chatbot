@@ -1,10 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&family=Outfit:wght@100..900&display=swap");
 
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
-  --font-outfit: 'Outfit', sans-serif;
-  --font-exo: 'Exo 2', sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+  --font-exo: "Exo 2", sans-serif;
   --color-bg-primary: #11111b;
+  --color-bg-secondary: #0e1019;
+  --color-bg-tertiary: #191824;
   --color-text-primary: #c5c7fc;
+  --color-text-secondary: #eff1f5;
+  --color-text-tertiary: #a6adc8;
+  --color-green: #a6da95;
+  --color-flamingo: #f4dbd6;
+  --color-peach: #f5a97f;
+  --color-mauve: #c6a0f6;
+  --color-maroon: #e64553;
+  --color-linear-blue: #89b4fa;
+  --color-linear-pink: #cba6f7;
 }

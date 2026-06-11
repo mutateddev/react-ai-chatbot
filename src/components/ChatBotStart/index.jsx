@@ -1,7 +1,7 @@
 const ChatBotStart = () => {
   return (
-    <div className='w-full h-full grid place-items-center'>
-      <button className='min-w-xs h-36 bg-linear-17 from-[#cba6f7] to-[#89b4fa] text-5xl uppercase tracking-wider shadow-xl cursor-pointer rounded-2xl font-exo font-semibold active:scale-95 outline-none transition-all ease-in-out duration-200 text-black/80 hover:to-[#cba6f7] hover:from-[#89b4fa] hover:text-black hover:shadow-2xl hover:-translate-y-1'>
+    <div className="grid h-full w-full place-items-center">
+      <button className="from-linear-pink to-linear-blue font-exo hover:to-linear-pink hover:from-linear-blue h-36 min-w-xs cursor-pointer rounded-2xl bg-linear-17 text-5xl font-semibold tracking-wider text-black/80 uppercase shadow-xl transition-all duration-200 ease-in-out outline-none hover:-translate-y-1 hover:text-black hover:shadow-2xl active:scale-95">
         Chat AI
       </button>
     </div>
