@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import Prompt from "./Prompt";
-import TypingIndicator from "./TypingIndicator";
 import ChatHeader from "./ChatHeader";
 import ChatList from "./ChatList";
+import ChatInput from "./ChatInput";
+import ChatWindow from "./ChatWindow";
+import ChatMessages from "./ChatMessages";
 
 const ChatBotApp = ({
   chats,
@@ -28,7 +29,7 @@ const ChatBotApp = ({
     });
   }, [messages]);
 
-  const handelInputChange = (e) => {
+  const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
@@ -128,52 +129,22 @@ const ChatBotApp = ({
         onDeleteChat={handleDeleteChat}
       />
 
-      {/* chat window */}
-      <div className="flex h-full w-3/4 flex-col">
+      <ChatWindow>
         <ChatHeader onGoBack={onGoBack} />
 
-        {/* chat */}
-        <div className="flex w-full grow flex-col gap-y-10 overflow-y-auto p-2.5">
-          {/* prompt & response */}
-          {messages.map((msg, i) =>
-            msg.type === "prompt" ? (
-              <Prompt key={i} text={msg.text} timestamp={msg.timestamp} />
-            ) : (
-              <Response key={i} text={msg.text} timestamp={msg.timestamp} />
-            ),
-          )}
+        <ChatMessages
+          messages={messages}
+          isTyping={isTyping}
+          chatEndRef={chatEndRef}
+        />
 
-          {/* typing message */}
-          {isTyping && <TypingIndicator />}
-          <div ref={chatEndRef}></div>
-        </div>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-          className="bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200"
-        >
-          <div className="flex w-24 cursor-pointer justify-center text-2xl">
-            <i className="fa-solid fa-face-smile"></i>
-          </div>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handelInputChange}
-            onKeyDown={handleKeyDown}
-            className="text-text-tertiary h-full grow border-none pl-5 text-lg outline-none focus:placeholder-transparent"
-            placeholder="Type a message..."
-          />
-
-          <button
-            onClick={sendMessage}
-            className="flex w-20 cursor-pointer justify-center"
-          >
-            <i className="fa-solid fa-paper-plane block text-xl"></i>
-          </button>
-        </form>
-      </div>
+        <ChatInput
+          inputValue={inputValue}
+          handleInputChange={handleInputChange}
+          handleKeyDown={handleKeyDown}
+          sendMessage={sendMessage}
+        />
+      </ChatWindow>
     </div>
   );
 };
