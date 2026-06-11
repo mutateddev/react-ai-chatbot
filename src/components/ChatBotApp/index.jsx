@@ -1,12 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Prompt from "./Prompt";
 import TypingIndicator from "./TypingIndicator";
 import ChatHeader from "./ChatHeader";
 import ChatList from "./ChatList";
 
-const ChatBotApp = ({ chats, setChats, onGoBack }) => {
+const ChatBotApp = ({
+  chats,
+  setChats,
+  onGoBack,
+  activeChat,
+  setActiveChat,
+  onNewChat,
+}) => {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState(chats[0]?.messages || []);
+
+  useEffect(() => {
+    const activeChatObj = chats.find((chat) => chat.id === activeChat);
+    setMessages(activeChatObj ? activeChatObj.messages : []);
+  }, [activeChat, chats]);
 
   const handelInputChange = (e) => {
     setInputValue(e.target.value);
@@ -21,18 +33,37 @@ const ChatBotApp = ({ chats, setChats, onGoBack }) => {
       timestamp: new Date().toLocaleTimeString(),
     };
 
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-    setInputValue("");
+    if (!activeChat) {
+      onNewChat(inputValue);
+      setInputValue("");
+    } else {
+      const updatedMessages = [...messages, newMessage];
+      setMessages(updatedMessages);
+      setInputValue("");
 
-    const updatedChats = chats.map((chat, i) => {
-      if (i === 0) {
-        return { ...chat, messages: updatedMessages };
-      }
-      return chat;
-    });
+      const updatedChats = chats.map((chat) => {
+        if (chat.id === activeChat) {
+          return { ...chat, messages: updatedMessages };
+        }
+        return chat;
+      });
 
+      setChats(updatedChats);
+    }
+  };
+
+  const handleSelectChat = (id) => {
+    setActiveChat(id);
+  };
+
+  const handleDeleteChat = (id) => {
+    const updatedChats = chats.filter((chat) => chat.id !== id);
     setChats(updatedChats);
+
+    if (id === activeChat) {
+      const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : null;
+      setActiveChat(newActiveChat);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -42,10 +73,15 @@ const ChatBotApp = ({ chats, setChats, onGoBack }) => {
     }
   };
 
-  const tempActive = true;
   return (
     <div className="flex h-full w-full">
-      <ChatList chats={chats} tempActive={tempActive} />
+      <ChatList
+        chats={chats}
+        activeChat={activeChat}
+        handleSelectChat={handleSelectChat}
+        onNewChat={onNewChat}
+        onDeleteChat={handleDeleteChat}
+      />
 
       {/* chat window */}
       <div className="flex h-full w-3/4 flex-col">
