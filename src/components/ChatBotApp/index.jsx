@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Prompt from "./Prompt";
 import TypingIndicator from "./TypingIndicator";
 import ChatHeader from "./ChatHeader";
@@ -14,17 +14,25 @@ const ChatBotApp = ({
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState(chats[0]?.messages || []);
+  const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     const activeChatObj = chats.find((chat) => chat.id === activeChat);
     setMessages(activeChatObj ? activeChatObj.messages : []);
   }, [activeChat, chats]);
 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
   const handelInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (inputValue.trim() === "") return;
 
     const newMessage = {
@@ -47,8 +55,45 @@ const ChatBotApp = ({
         }
         return chat;
       });
-
       setChats(updatedChats);
+
+      setIsTyping(true);
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: inputValue }],
+            max_tokens: 500,
+          }),
+        },
+      );
+      const data = await response.json();
+      const chatResponse = data.choices[0].message.content.trim();
+
+      const newResponse = {
+        type: "response",
+        text: chatResponse,
+        timestamp: new Date().toLocaleTimeString(),
+      };
+
+      const updatedMessagesWithResponse = [...updatedMessages, newResponse];
+      setMessages(updatedMessagesWithResponse);
+      setIsTyping(false);
+
+      const updatedGhatsWithResponse = chats.map((chat) => {
+        if (chat.id === activeChat) {
+          return { ...chat, messages: updatedGhatsWithResponse };
+        }
+
+        return chat;
+      });
+      setChats(updatedGhatsWithResponse);
     }
   };
 
@@ -88,7 +133,7 @@ const ChatBotApp = ({
         <ChatHeader onGoBack={onGoBack} />
 
         {/* chat */}
-        <div className="flex w-full grow flex-col gap-y-10 p-2.5">
+        <div className="flex w-full grow flex-col gap-y-10 overflow-y-auto p-2.5">
           {/* prompt & response */}
           {messages.map((msg, i) =>
             msg.type === "prompt" ? (
@@ -99,14 +144,15 @@ const ChatBotApp = ({
           )}
 
           {/* typing message */}
-          <TypingIndicator />
+          {isTyping && <TypingIndicator />}
+          <div ref={chatEndRef}></div>
         </div>
 
         <form
           onSubmit={(e) => {
             e.preventDefault();
           }}
-          className="bg-bg-secondary border-text-primary/50 flex h-24 w-full items-center border-t shadow inset-shadow-yellow-200"
+          className="bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200"
         >
           <div className="flex w-24 cursor-pointer justify-center text-2xl">
             <i className="fa-solid fa-face-smile"></i>

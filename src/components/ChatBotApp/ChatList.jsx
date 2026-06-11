@@ -1,6 +1,5 @@
 const ChatList = ({
   chats,
-  tempActive,
   onNewChat,
   activeChat,
   handleSelectChat,
