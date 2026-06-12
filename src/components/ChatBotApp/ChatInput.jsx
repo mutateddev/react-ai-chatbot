@@ -1,5 +1,5 @@
-import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
+import EmojiPickerButton from "./EmojiPicker";
 
 const ChatInput = ({
   inputValue,
@@ -21,23 +21,12 @@ const ChatInput = ({
       }}
       className="bg-bg-secondary border-text-primary/50 relative flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200"
     >
-      <div className="flex w-24 cursor-pointer justify-center text-2xl">
-        <i
-          className="fa-solid fa-face-smile"
-          onClick={() => setShowEmojiPicker((prv) => !prv)}
-        ></i>
+      <EmojiPickerButton
+        showEmojiPicker={showEmojiPicker}
+        setShowEmojiPicker={setShowEmojiPicker}
+        handleEmojiSelect={handleEmojiSelect}
+      />
 
-        {showEmojiPicker && (
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="absolute bottom-16 left-20"
-          >
-            <EmojiPicker
-              onEmojiClick={(emojiObject) => handleEmojiSelect(emojiObject)}
-            />
-          </div>
-        )}
-      </div>
       <input
         type="text"
         value={inputValue}
