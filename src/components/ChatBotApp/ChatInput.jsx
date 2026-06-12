@@ -1,18 +1,42 @@
+import EmojiPicker from "emoji-picker-react";
+import { useState } from "react";
+
 const ChatInput = ({
   inputValue,
   handleInputChange,
   handleKeyDown,
   sendMessage,
+  setInputValue,
 }) => {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const handleEmojiSelect = (emojiObj) => {
+    setInputValue((prvInp) => prvInp + emojiObj.emoji);
+  };
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
       }}
-      className="bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200"
+      className="bg-bg-secondary border-text-primary/50 relative flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200"
     >
       <div className="flex w-24 cursor-pointer justify-center text-2xl">
-        <i className="fa-solid fa-face-smile"></i>
+        <i
+          className="fa-solid fa-face-smile"
+          onClick={() => setShowEmojiPicker((prv) => !prv)}
+        ></i>
+
+        {showEmojiPicker && (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="absolute bottom-16 left-20"
+          >
+            <EmojiPicker
+              onEmojiClick={(emojiObject) => handleEmojiSelect(emojiObject)}
+            />
+          </div>
+        )}
       </div>
       <input
         type="text"
@@ -21,6 +45,7 @@ const ChatInput = ({
         onKeyDown={handleKeyDown}
         className="text-text-tertiary h-full grow border-none pl-5 text-lg outline-none focus:placeholder-transparent"
         placeholder="Type a message..."
+        onFocus={() => setShowEmojiPicker(false)}
       />
 
       <button

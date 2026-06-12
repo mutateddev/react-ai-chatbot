@@ -143,6 +143,7 @@ const ChatBotApp = ({
           handleInputChange={handleInputChange}
           handleKeyDown={handleKeyDown}
           sendMessage={sendMessage}
+          setInputValue={setInputValue}
         />
       </ChatWindow>
     </div>
