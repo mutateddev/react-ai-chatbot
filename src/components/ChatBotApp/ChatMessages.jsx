@@ -1,14 +1,16 @@
 import useChat from '../../contexts/chat-context/useChat';
 import Response from './Response';
 import Prompt from './Prompt';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 const ChatMessages = () => {
   const { chats, activeChatId } = useChat();
   const scrollRef = useRef(null);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
-  const messages = activeChat?.messages || [];
+  const messages = useMemo(() => {
+    return activeChat?.messages ?? [];
+  }, [activeChat]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({
