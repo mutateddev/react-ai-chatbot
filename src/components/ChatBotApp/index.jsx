@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import ChatHeader from "./ChatHeader";
-import ChatList from "./ChatList";
-import ChatInput from "./ChatInput";
-import ChatWindow from "./ChatWindow";
-import ChatMessages from "./ChatMessages";
+import { useEffect, useRef, useState } from 'react';
+import ChatHeader from './ChatHeader';
+import ChatList from './ChatList';
+import ChatInput from './ChatInput';
+import ChatWindow from './ChatWindow';
+import ChatMessages from './ChatMessages';
 
 const ChatBotApp = ({
   chats,
@@ -13,7 +13,7 @@ const ChatBotApp = ({
   setActiveChat,
   onNewChat,
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState(chats[0]?.messages || []);
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
@@ -25,7 +25,7 @@ const ChatBotApp = ({
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }, [messages]);
 
@@ -34,21 +34,21 @@ const ChatBotApp = ({
   };
 
   const sendMessage = async () => {
-    if (inputValue.trim() === "") return;
+    if (inputValue.trim() === '') return;
 
     const newMessage = {
-      type: "prompt",
+      type: 'prompt',
       text: inputValue,
       timestamp: new Date().toLocaleTimeString(),
     };
 
     if (!activeChat) {
       onNewChat(inputValue);
-      setInputValue("");
+      setInputValue('');
     } else {
       const updatedMessages = [...messages, newMessage];
       setMessages(updatedMessages);
-      setInputValue("");
+      setInputValue('');
 
       const updatedChats = chats.map((chat) => {
         if (chat.id === activeChat) {
@@ -60,16 +60,16 @@ const ChatBotApp = ({
 
       setIsTyping(true);
       const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
+        'https://api.openai.com/v1/chat/completions',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
           },
           body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: inputValue }],
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: inputValue }],
             max_tokens: 500,
           }),
         },
@@ -78,7 +78,7 @@ const ChatBotApp = ({
       const chatResponse = data.choices[0].message.content.trim();
 
       const newResponse = {
-        type: "response",
+        type: 'response',
         text: chatResponse,
         timestamp: new Date().toLocaleTimeString(),
       };
@@ -113,14 +113,14 @@ const ChatBotApp = ({
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       sendMessage();
     }
   };
 
   return (
-    <div className="flex h-full w-full">
+    <div className='flex h-full w-full'>
       <ChatList
         chats={chats}
         activeChat={activeChat}

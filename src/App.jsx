@@ -1,7 +1,7 @@
-import { useState } from "react";
-import ChatBotApp from "./components/ChatBotApp";
-import ChatBotStart from "./components/ChatBotStart";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from 'react';
+import ChatBotApp from './components/ChatBotApp';
+import ChatBotStart from './components/ChatBotStart';
+import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   const [isChatting, setIsChatting] = useState(false);
@@ -16,14 +16,14 @@ const App = () => {
     }
   };
 
-  const createNewChat = (initMessage = "") => {
+  const createNewChat = (initMessage = '') => {
     const newChat = {
       id: uuidv4(),
-      displayId: `Chat ${new Date().toLocaleDateString("en-GB")} ${new Date().toLocaleTimeString()}`,
+      displayId: `Chat ${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString()}`,
       messages: initMessage
         ? [
             {
-              type: "prompt",
+              type: 'prompt',
               text: initMessage,
               timestamp: new Date().toLocaleTimeString(),
             },
@@ -40,7 +40,7 @@ const App = () => {
   };
 
   return (
-    <div className="bg-bg-primary text-text-primary grid h-dvh w-full place-items-center">
+    <div className='bg-bg-primary text-text-primary grid h-dvh w-full place-items-center'>
       {!isChatting ? (
         <ChatBotStart onStartChatting={handleStartChat} />
       ) : (
