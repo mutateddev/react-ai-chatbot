@@ -6,7 +6,7 @@ const ChatList = () => {
   const { chats } = useChat();
 
   return (
-    <div className='border-text-primary/50 bg-bg-secondary flex h-full w-1/4 flex-col gap-y-4 border-r p-4'>
+    <div className='border-text-primary/50 bg-bg-secondary scrollbar-thumb-text-primary/30 fixed flex max-h-dvh w-1/4 scrollbar-thin flex-col gap-y-4 overflow-y-auto border-r p-4'>
       <ChatListHeader />
 
       {chats.map((chat) => (

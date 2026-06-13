@@ -1,6 +1,6 @@
 import useChat from '../../contexts/chat-context/useChat';
 
-const ChatHeader = () => {
+const ChatWindowHeader = () => {
   const { deactivateChat } = useChat();
   return (
     <div className='bg-bg-tertiary flex min-h-20 w-full items-center justify-between px-5'>
@@ -14,4 +14,4 @@ const ChatHeader = () => {
   );
 };
 
-export default ChatHeader;
+export default ChatWindowHeader;
