@@ -21,20 +21,35 @@ const ChatMessages = () => {
 
   return (
     <div className='flex w-full grow flex-col gap-y-6 overflow-y-auto p-3'>
-      {messages.map((msg) =>
-        msg.type === 'prompt' ? (
-          <Prompt
-            key={msg.timestamp}
-            text={msg.text}
-            timestamp={msg.timestamp}
-          />
-        ) : (
-          <Response
-            key={msg.timestamp}
-            text={msg.text}
-            timestamp={msg.timestamp}
-          />
-        ),
+      {messages.length === 0 ? (
+        <div className='flex grow flex-col items-center justify-center text-center'>
+          <i className='fa-solid fa-comments text-linear-pink mb-4 text-6xl' />
+
+          <h3 className='font-exo text-text-primary text-3xl font-bold tracking-wider'>
+            Start a New Chat
+          </h3>
+
+          <p className='text-text-tertiary mt-3 max-w-md text-lg'>
+            Ask anything. Explore ideas, solve problems, or just have a
+            conversation.
+          </p>
+        </div>
+      ) : (
+        messages.map((msg) =>
+          msg.type === 'prompt' ? (
+            <Prompt
+              key={msg.timestamp}
+              text={msg.text}
+              timestamp={msg.timestamp}
+            />
+          ) : (
+            <Response
+              key={msg.timestamp}
+              text={msg.text}
+              timestamp={msg.timestamp}
+            />
+          ),
+        )
       )}
 
       <div ref={scrollRef} />

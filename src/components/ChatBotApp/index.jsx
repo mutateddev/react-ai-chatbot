@@ -8,12 +8,7 @@ const ChatBotApp = () => {
   return (
     <div className='relative flex h-full w-full overflow-hidden'>
       <ChatList />
-
-      <ChatWindow>
-        <ChatWindowHeader />
-        <ChatMessages />
-        <ChatInput />
-      </ChatWindow>
+      <ChatWindow />
     </div>
   );
 };
