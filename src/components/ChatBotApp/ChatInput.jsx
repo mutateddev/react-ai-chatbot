@@ -6,6 +6,7 @@ const ChatInput = () => {
   const { sendMessage } = useChat();
   const [inputValue, setInputValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -15,17 +16,37 @@ const ChatInput = () => {
     setInputValue((prvInp) => prvInp + emojiObj.emoji);
   };
 
-  const buildMessage = () => ({
-    type: 'prompt',
-    text: inputValue,
+  const buildMessage = (type, text) => ({
+    type,
+    text,
     timestamp: new Date().toLocaleTimeString(),
   });
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
-    const newMessage = buildMessage();
-    sendMessage(newMessage);
+    const userMessage = buildMessage('prompt', inputValue);
+    sendMessage(userMessage);
     setInputValue('');
+
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${import.meta.env.VITE_Groq_API}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'user',
+            content: inputValue,
+          },
+        ],
+      }),
+    });
+    const data = await res.json();
+    const aiMessage = buildMessage('response', data.choices[0].message.content);
+    sendMessage(aiMessage);
   };
 
   const handleKeyDown = (e) => {

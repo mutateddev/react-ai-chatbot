@@ -101,7 +101,6 @@ const ChatProvider = ({ children }) => {
   };
 
   const sendMessage = (message) => {
-    console.log(message);
     dispatch({ type: 'chat/sendMessage', payload: { message } });
   };
 
