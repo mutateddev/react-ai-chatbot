@@ -1,8 +1,14 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import chatContext from './chat-context';
 import { v4 as uuidv4 } from 'uuid';
 
-const initState = { chats: [], activeChatId: null, isChatOpen: false };
+const storedChats = JSON.parse(localStorage.getItem('chats')) || [];
+
+const initState = {
+  chats: storedChats,
+  activeChatId: storedChats[0]?.id ?? null,
+  isChatOpen: false,
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -26,9 +32,11 @@ const reducer = (state, action) => {
             ]
           : [],
       };
+      const updatedChats = [newChat, ...state.chats];
+
       return {
         ...state,
-        chats: [newChat, ...state.chats],
+        chats: updatedChats,
         activeChatId: newChat.id,
       };
     }
@@ -56,10 +64,11 @@ const reducer = (state, action) => {
       const selectedChat = state.chats.find(
         (chat) => chat.id === action.payload.id,
       );
-      return { ...state, activeChatId: selectedChat.id };
+      return { ...state, activeChatId: selectedChat?.id ?? state.activeChatId };
     }
 
     case 'chat/sendMessage': {
+      if (!state.activeChatId) return state;
       const updatedChats = state.chats.map((chat) => {
         if (chat.id !== state.activeChatId) return chat;
 
@@ -79,6 +88,10 @@ const reducer = (state, action) => {
 
 const ChatProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initState);
+
+  useEffect(() => {
+    localStorage.setItem('chats', JSON.stringify(state.chats));
+  }, [state.chats]);
 
   const activateChat = () => {
     dispatch({ type: 'chat/start' });
