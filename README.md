@@ -1,18 +1,60 @@
-# React + Vite
+# 🧬 React AI ChatBot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern AI-powered chat application built with React, Context API, and Groq LLM.  
+Supports multiple conversations, real-time AI responses.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📸 Preview
 
-## React Compiler
+### Home Screen
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+![Home Preview](https://raw.githubusercontent.com/mutateddev/react-ai-chatbot/main/src/assets/home-preview.png)
 
-Note: This will impact Vite dev & build performances.
+### Chat Interface
 
-## Expanding the ESLint configuration
+![Chat Preview](https://raw.githubusercontent.com/mutateddev/react-ai-chatbot/main/src/assets/chat-preview.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⚙️ Tech Stack
+
+- ⚛️ React (Hooks + Context API + useReducer)
+- 🎨 Tailwind CSS
+- 🧠 Groq AI (LLaMA 3.3)
+- 💬 Emoji Picker React
+
+---
+
+## 🌐 AI API Used
+
+- 🤖 **[Groq AI](https://console.groq.com/docs/overview)**  
+  Used for generating real-time AI responses using LLaMA 3.3 model.
+
+---
+
+## ✨ Features
+
+- 🧵 Create multiple chat sessions
+- 💬 Real-time AI responses
+- 🗂️ Switch between different chats
+- 🗑️ Delete chat sessions
+- 😊 Emoji picker support
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone repository
+
+```bash
+git clone https://github.com/mutateddev/news-blogs-widget.git
+
+cd news-blogs-widget
+
+npm install
+
+npm run dev
+```
+
+Open your browser and navigate to: [localhost](http://localhost:5173)
