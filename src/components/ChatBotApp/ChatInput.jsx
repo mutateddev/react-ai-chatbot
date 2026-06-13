@@ -60,6 +60,13 @@ const ChatInput = () => {
       sendMessage(aiMessage);
     } catch (err) {
       console.error('AI error:', err);
+
+      const errorMessage = buildMessage(
+        'response',
+        '⚠️ Unable to reach the AI service. If the service is restricted in your region, try using a VPN and send your message again.',
+      );
+
+      sendMessage(errorMessage);
     } finally {
       setAiTyping(false);
     }
