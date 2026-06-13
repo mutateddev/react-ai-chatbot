@@ -51,7 +51,7 @@ const ChatInput = () => {
       );
 
       const data = await res.json();
-
+      // send ai message
       const aiMessage = buildMessage(
         'response',
         data.choices[0].message.content,
@@ -81,7 +81,6 @@ const ChatInput = () => {
 
   return (
     <div className='relative'>
-      {/* typing indicator (outside input) */}
       {aiTyping && (
         <div className='absolute -top-10 left-3'>
           <TypingIndicator />
