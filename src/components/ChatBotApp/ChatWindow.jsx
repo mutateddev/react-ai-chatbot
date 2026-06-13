@@ -1,6 +1,6 @@
 const ChatWindow = ({ children }) => {
   return (
-    <div className='bg-bg-primary ml-auto flex h-full w-3/4 flex-col'>
+    <div className='bg-bg-primary flex h-full w-4/5 flex-col overflow-hidden'>
       {children}
     </div>
   );

@@ -1,8 +1,13 @@
-const Prompt = ({ text, timestamp: timestamp }) => {
+const Prompt = ({ text, timestamp }) => {
   return (
-    <div className='text-text-tertiary max-w-4/5 self-end rounded-tl-4xl rounded-br-4xl rounded-bl-4xl border border-white/10 p-5 text-right text-base shadow-xl'>
-      {text}
-      <span className='font-exo mt-1 block text-sm'>{timestamp}</span>
+    <div className='max-w-[80%] self-end rounded-tl-3xl rounded-tr-3xl rounded-bl-3xl border border-white/10 bg-white/5 px-4 py-3 text-right shadow-lg'>
+      {/* message */}
+      <p className='text-text-primary text-base leading-relaxed'>{text}</p>
+
+      {/* timestamp */}
+      <span className='font-exo text-text-tertiary mt-1 block text-xs'>
+        {timestamp}
+      </span>
     </div>
   );
 };

@@ -5,16 +5,13 @@ import TypingIndicator from './TypingIndicator';
 
 const ChatInput = () => {
   const { sendMessage } = useChat();
+
   const [inputValue, setInputValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [aiTyping, setAiTyping] = useState(false);
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
   const handleEmojiSelect = (emojiObj) => {
-    setInputValue((prvInp) => prvInp + emojiObj.emoji);
+    setInputValue((prev) => prev + emojiObj.emoji);
   };
 
   const buildMessage = (type, text) => ({
@@ -24,31 +21,48 @@ const ChatInput = () => {
   });
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
-    const userMessage = buildMessage('prompt', inputValue);
-    sendMessage(userMessage);
+    const text = inputValue.trim();
+    if (!text || aiTyping) return;
+
+    // send user message
+    sendMessage(buildMessage('prompt', text));
     setInputValue('');
     setAiTyping(true);
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_Groq_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          {
-            role: 'user',
-            content: inputValue,
+
+    try {
+      const res = await fetch(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${import.meta.env.VITE_Groq_API_KEY}`,
           },
-        ],
-      }),
-    });
-    const data = await res.json();
-    const aiMessage = buildMessage('response', data.choices[0].message.content);
-    sendMessage(aiMessage);
-    setAiTyping(false);
+          body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [
+              {
+                role: 'user',
+                content: text,
+              },
+            ],
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      const aiMessage = buildMessage(
+        'response',
+        data.choices[0].message.content,
+      );
+
+      sendMessage(aiMessage);
+    } catch (err) {
+      console.error('AI error:', err);
+    } finally {
+      setAiTyping(false);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -60,11 +74,16 @@ const ChatInput = () => {
 
   return (
     <div className='relative'>
+      {/* typing indicator (outside input) */}
+      {aiTyping && (
+        <div className='absolute -top-10 left-3'>
+          <TypingIndicator />
+        </div>
+      )}
+
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-        className='bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200'
+        onSubmit={(e) => e.preventDefault()}
+        className='bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow'
       >
         <EmojiPickerButton
           showEmojiPicker={showEmojiPicker}
@@ -75,7 +94,7 @@ const ChatInput = () => {
         <input
           type='text'
           value={inputValue}
-          onChange={handleInputChange}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           className='text-text-tertiary h-full grow border-none pl-5 text-lg outline-none focus:placeholder-transparent'
           placeholder='Type a message...'
@@ -83,15 +102,16 @@ const ChatInput = () => {
         />
 
         <button
+          type='button'
           onClick={handleSendMessage}
-          className='flex w-20 cursor-pointer justify-center'
           disabled={aiTyping}
+          className='flex w-20 cursor-pointer justify-center'
         >
           <i
-            className={`fa-solid fa-paper-plane block text-xl ${aiTyping ? 'cursor-not-allowed opacity-40' : ''}`}
-          ></i>
-
-          {aiTyping && <TypingIndicator />}
+            className={`fa-solid fa-paper-plane text-xl transition ${
+              aiTyping ? 'cursor-not-allowed opacity-40' : ''
+            }`}
+          />
         </button>
       </form>
     </div>

@@ -9,12 +9,24 @@ const ChatListHeader = () => {
   };
 
   return (
-    <div className='text-mauve flex w-full items-center justify-between px-2.5 py-5 text-xl'>
-      <h2 className='font-exo font-bold tracking-wider uppercase'>Chat List</h2>
-      <i
-        className='fa-solid fa-pen-to-square cursor-pointer'
+    <div className='bg-bg-secondary/60 flex items-center justify-between border-b border-white/10 px-4 py-4 backdrop-blur-md'>
+      <div className='flex flex-col'>
+        <h2 className='font-exo text-text-tertiary text-sm tracking-widest uppercase'>
+          Conversations
+        </h2>
+        <span className='text-text-primary text-lg font-semibold'>
+          Chat List
+        </span>
+      </div>
+
+      <button
         onClick={(e) => handleCreateChat(e)}
-      ></i>
+        className='group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl bg-white/5 transition-all duration-300 hover:bg-white/10 active:scale-95'
+      >
+        <i className='fa-solid fa-pen-to-square text-text-tertiary text-base transition-colors duration-300 group-hover:text-white' />
+        {/* glow effect */}
+        <span className='from-linear-pink/20 to-linear-blue/20 absolute inset-0 rounded-xl bg-linear-to-r opacity-0 blur-md transition-all duration-300 group-hover:opacity-100' />
+      </button>
     </div>
   );
 };

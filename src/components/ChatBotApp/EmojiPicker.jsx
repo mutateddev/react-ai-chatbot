@@ -6,16 +6,16 @@ const EmojiPickerButton = ({
   handleEmojiSelect,
 }) => {
   return (
-    <div className='flex w-24 cursor-pointer justify-center text-2xl'>
+    <div className='relative flex w-24 justify-center text-2xl'>
       <i
-        className='fa-solid fa-face-smile'
-        onClick={() => setShowEmojiPicker((prv) => !prv)}
-      ></i>
+        className='fa-solid fa-face-smile text-text-tertiary cursor-pointer transition hover:text-white'
+        onClick={() => setShowEmojiPicker((prev) => !prev)}
+      />
 
       {showEmojiPicker && (
         <div
+          className='absolute bottom-14 left-0 z-50'
           onClick={(e) => e.stopPropagation()}
-          className='absolute bottom-16 left-20'
         >
           <EmojiPicker
             onEmojiClick={(emojiObject) => handleEmojiSelect(emojiObject)}

@@ -6,7 +6,7 @@ const App = () => {
   const { isChatOpen } = useChat();
 
   return (
-    <div className='bg-bg-primary text-text-primary grid h-dvh w-full place-items-center'>
+    <div className='bg-bg-primary text-text-primary relative grid h-dvh w-full place-items-center'>
       {!isChatOpen ? <ChatBotStart /> : <ChatBotApp />}
     </div>
   );

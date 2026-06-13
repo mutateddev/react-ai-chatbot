@@ -6,7 +6,7 @@ import ChatMessages from './ChatMessages';
 
 const ChatBotApp = () => {
   return (
-    <div className='relative flex h-full w-full'>
+    <div className='relative flex h-full w-full overflow-hidden'>
       <ChatList />
 
       <ChatWindow>

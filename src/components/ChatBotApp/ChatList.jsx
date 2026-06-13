@@ -6,12 +6,14 @@ const ChatList = () => {
   const { chats } = useChat();
 
   return (
-    <div className='border-text-primary/50 bg-bg-secondary scrollbar-thumb-text-primary/30 fixed flex max-h-dvh w-1/4 scrollbar-thin flex-col gap-y-4 overflow-y-auto border-r p-4'>
+    <div className='bg-bg-secondary flex h-dvh w-1/5 flex-col border-r border-white/10 p-3'>
       <ChatListHeader />
 
-      {chats.map((chat) => (
-        <ChatListItem key={chat.id} chat={chat} />
-      ))}
+      <div className='flex-1 scrollbar-thin scrollbar-thumb-white/10 space-y-2 overflow-y-auto pr-1 hover:scrollbar-thumb-white/20'>
+        {chats.map((chat) => (
+          <ChatListItem key={chat.id} chat={chat} />
+        ))}
+      </div>
     </div>
   );
 };

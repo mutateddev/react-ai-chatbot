@@ -1,31 +1,41 @@
 import useChat from '../../contexts/chat-context/useChat';
 import Response from './Response';
 import Prompt from './Prompt';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const ChatMessages = () => {
   const { chats, activeChatId } = useChat();
-  const scrollRef = useRef();
+  const scrollRef = useRef(null);
+
   const activeChat = chats.find((chat) => chat.id === activeChatId);
-  const messages = useMemo(() => activeChat?.messages ?? [], [activeChat]);
+  const messages = activeChat?.messages || [];
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({
       behavior: 'smooth',
+      block: 'end',
     });
   }, [messages]);
 
   return (
-    <div className='flex w-full grow flex-col gap-y-10 overflow-y-auto p-2.5'>
-      {messages.map((msg, i) =>
+    <div className='flex w-full grow flex-col gap-y-6 overflow-y-auto p-3'>
+      {messages.map((msg) =>
         msg.type === 'prompt' ? (
-          <Prompt key={i} text={msg.text} timestamp={msg.timestamp} />
+          <Prompt
+            key={msg.timestamp}
+            text={msg.text}
+            timestamp={msg.timestamp}
+          />
         ) : (
-          <Response key={i} text={msg.text} timestamp={msg.timestamp} />
+          <Response
+            key={msg.timestamp}
+            text={msg.text}
+            timestamp={msg.timestamp}
+          />
         ),
       )}
 
-      <div ref={scrollRef}></div>
+      <div ref={scrollRef} />
     </div>
   );
 };
