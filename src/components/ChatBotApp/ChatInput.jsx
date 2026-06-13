@@ -1,17 +1,38 @@
 import { useState } from 'react';
 import EmojiPickerButton from './EmojiPicker';
+import useChat from '../../contexts/chat-context/useChat';
 
-const ChatInput = ({
-  inputValue,
-  handleInputChange,
-  handleKeyDown,
-  sendMessage,
-  setInputValue,
-}) => {
+const ChatInput = () => {
+  const { sendMessage } = useChat();
+  const [inputValue, setInputValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
 
   const handleEmojiSelect = (emojiObj) => {
     setInputValue((prvInp) => prvInp + emojiObj.emoji);
+  };
+
+  const buildMessage = () => ({
+    type: 'prompt',
+    text: inputValue,
+    timestamp: new Date().toLocaleTimeString(),
+  });
+
+  const handleSendMessage = () => {
+    if (!inputValue.trim()) return;
+    const newMessage = buildMessage();
+    sendMessage(newMessage);
+    setInputValue('');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   return (
@@ -38,7 +59,7 @@ const ChatInput = ({
       />
 
       <button
-        onClick={sendMessage}
+        onClick={handleSendMessage}
         className='flex w-20 cursor-pointer justify-center'
       >
         <i className='fa-solid fa-paper-plane block text-xl'></i>
