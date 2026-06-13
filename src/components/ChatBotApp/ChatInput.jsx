@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import EmojiPickerButton from './EmojiPicker';
 import useChat from '../../contexts/chat-context/useChat';
+import TypingIndicator from './TypingIndicator';
 
 const ChatInput = () => {
   const { sendMessage } = useChat();
   const [inputValue, setInputValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [aiTyping, setAiTyping] = useState(false);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -27,12 +28,12 @@ const ChatInput = () => {
     const userMessage = buildMessage('prompt', inputValue);
     sendMessage(userMessage);
     setInputValue('');
-
+    setAiTyping(true);
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_Groq_API}`,
+        Authorization: `Bearer ${import.meta.env.VITE_Groq_API_KEY}`,
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
@@ -47,6 +48,7 @@ const ChatInput = () => {
     const data = await res.json();
     const aiMessage = buildMessage('response', data.choices[0].message.content);
     sendMessage(aiMessage);
+    setAiTyping(false);
   };
 
   const handleKeyDown = (e) => {
@@ -57,35 +59,42 @@ const ChatInput = () => {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-      className='bg-bg-secondary border-text-primary/50 relative flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200'
-    >
-      <EmojiPickerButton
-        showEmojiPicker={showEmojiPicker}
-        setShowEmojiPicker={setShowEmojiPicker}
-        handleEmojiSelect={handleEmojiSelect}
-      />
-
-      <input
-        type='text'
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        className='text-text-tertiary h-full grow border-none pl-5 text-lg outline-none focus:placeholder-transparent'
-        placeholder='Type a message...'
-        onFocus={() => setShowEmojiPicker(false)}
-      />
-
-      <button
-        onClick={handleSendMessage}
-        className='flex w-20 cursor-pointer justify-center'
+    <div className='relative'>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className='bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow inset-shadow-yellow-200'
       >
-        <i className='fa-solid fa-paper-plane block text-xl'></i>
-      </button>
-    </form>
+        <EmojiPickerButton
+          showEmojiPicker={showEmojiPicker}
+          setShowEmojiPicker={setShowEmojiPicker}
+          handleEmojiSelect={handleEmojiSelect}
+        />
+
+        <input
+          type='text'
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          className='text-text-tertiary h-full grow border-none pl-5 text-lg outline-none focus:placeholder-transparent'
+          placeholder='Type a message...'
+          onFocus={() => setShowEmojiPicker(false)}
+        />
+
+        <button
+          onClick={handleSendMessage}
+          className='flex w-20 cursor-pointer justify-center'
+          disabled={aiTyping}
+        >
+          <i
+            className={`fa-solid fa-paper-plane block text-xl ${aiTyping ? 'cursor-not-allowed opacity-40' : ''}`}
+          ></i>
+
+          {aiTyping && <TypingIndicator />}
+        </button>
+      </form>
+    </div>
   );
 };
 
