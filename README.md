@@ -17,15 +17,6 @@ Supports multiple conversations, real-time AI responses.
 
 ---
 
-## ⚙️ Tech Stack
-
-- ⚛️ React (Hooks + Context API + useReducer)
-- 🎨 Tailwind CSS
-- 🧠 Groq AI (LLaMA 3.3)
-- 💬 Emoji Picker React
-
----
-
 ## 🌐 AI API Used
 
 - 🤖 **[Groq AI](https://console.groq.com/docs/overview)**  
