@@ -30,32 +30,23 @@ const ChatInput = () => {
     setAiTyping(true);
 
     try {
-      const res = await fetch(
-        'https://api.groq.com/openai/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_Groq_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
-            messages: [
-              {
-                role: 'user',
-                content: text,
-              },
-            ],
-          }),
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          message: text,
+        }),
+      });
 
       const data = await res.json();
-      // send ai message
-      const aiMessage = buildMessage(
-        'response',
-        data.choices[0].message.content,
-      );
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to get AI response');
+      }
+
+      const aiMessage = buildMessage('response', data.message);
 
       sendMessage(aiMessage);
     } catch (err) {
