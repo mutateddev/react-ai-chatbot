@@ -1,4 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import Groq from 'groq-sdk';
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -6,6 +11,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: 'Method not allowed',
     });
   }
+  // console.log('API KEY EXISTS:', Boolean(process.env.GROQ_API_KEY));
 
   try {
     const { message } = req.body;
@@ -16,42 +22,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    const response = await fetch(
-      'https://api.groq.com/openai/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: message,
         },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            {
-              role: 'user',
-              content: message,
-            },
-          ],
-        }),
-      },
-    );
+      ],
+      model: 'llama-3.1-8b-instant',
+      temperature: 1,
+      max_completion_tokens: 2048,
+      top_p: 1,
+    });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: data?.error?.message || 'Groq API request failed',
-      });
-    }
+    const aiMessage = chatCompletion.choices[0]?.message?.content || '';
 
     return res.status(200).json({
-      message: data.choices?.[0]?.message?.content || '',
+      message: aiMessage,
     });
   } catch (error) {
     console.error('Groq API error:', error);
 
     return res.status(500).json({
-      error: 'Internal server error',
+      error: 'Failed to generate AI response',
     });
   }
 }
