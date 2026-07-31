@@ -54,7 +54,7 @@ const ChatInput = () => {
 
       const errorMessage = buildMessage(
         'response',
-        '⚠️ Unable to reach the AI service. If the service is restricted in your region, try using a VPN and send your message again.',
+        '⚠️ Unable to reach the AI service. If the service is restricted in your region, try using a without VPN or different IP and send your message again.',
       );
 
       sendMessage(errorMessage);
