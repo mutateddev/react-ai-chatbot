@@ -8,6 +8,7 @@ const ChatMessages = () => {
   const scrollRef = useRef(null);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
+
   const messages = useMemo(() => {
     return activeChat?.messages ?? [];
   }, [activeChat]);
@@ -20,16 +21,16 @@ const ChatMessages = () => {
   }, [messages]);
 
   return (
-    <div className='flex w-full grow flex-col gap-y-6 overflow-y-auto p-3'>
+    <div className='flex w-full grow flex-col gap-y-4 overflow-y-auto p-3 sm:gap-y-6 sm:p-4'>
       {messages.length === 0 ? (
-        <div className='flex grow flex-col items-center justify-center text-center'>
-          <i className='fa-solid fa-comments text-linear-pink mb-4 text-6xl' />
+        <div className='flex grow flex-col items-center justify-center px-4 text-center'>
+          <i className='fa-solid fa-comments text-linear-pink mb-3 text-5xl sm:mb-4 sm:text-6xl' />
 
-          <h3 className='font-exo text-text-primary text-3xl font-bold tracking-wider'>
+          <h3 className='font-exo text-text-primary text-2xl font-bold tracking-wider sm:text-3xl'>
             Start a New Chat
           </h3>
 
-          <p className='text-text-tertiary mt-3 max-w-md text-lg'>
+          <p className='text-text-tertiary mt-3 max-w-md text-sm leading-relaxed sm:text-lg'>
             Ask anything. Explore ideas, solve problems, or just have a
             conversation.
           </p>

@@ -22,10 +22,11 @@ const ChatInput = () => {
 
   const handleSendMessage = async () => {
     const text = inputValue.trim();
+
     if (!text || aiTyping) return;
 
-    // send user message
     sendMessage(buildMessage('prompt', text));
+
     setInputValue('');
     setAiTyping(true);
 
@@ -46,18 +47,16 @@ const ChatInput = () => {
         throw new Error(data.error || 'Failed to get AI response');
       }
 
-      const aiMessage = buildMessage('response', data.message);
-
-      sendMessage(aiMessage);
+      sendMessage(buildMessage('response', data.message));
     } catch (err) {
       console.error('AI error:', err);
 
-      const errorMessage = buildMessage(
-        'response',
-        '⚠️ Unable to reach the AI service. If the service is restricted in your region, try using a without VPN or different IP and send your message again.',
+      sendMessage(
+        buildMessage(
+          'response',
+          '⚠️ Unable to reach the AI service. If the service is restricted in your region, try using a without VPN or different IP and send your message again.',
+        ),
       );
-
-      sendMessage(errorMessage);
     } finally {
       setAiTyping(false);
     }
@@ -73,14 +72,14 @@ const ChatInput = () => {
   return (
     <div className='relative'>
       {aiTyping && (
-        <div className='absolute -top-10 left-3'>
+        <div className='absolute -top-10 left-2 sm:left-3'>
           <TypingIndicator />
         </div>
       )}
 
       <form
         onSubmit={(e) => e.preventDefault()}
-        className='bg-bg-secondary border-text-primary/50 flex min-h-24 w-full items-center border-t shadow'
+        className='bg-bg-secondary border-text-primary/50 flex min-h-16 w-full items-center border-t px-2 shadow sm:min-h-24 sm:px-0'
       >
         <EmojiPickerButton
           showEmojiPicker={showEmojiPicker}
@@ -93,7 +92,7 @@ const ChatInput = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          className='text-text-tertiary h-full grow border-none pl-5 text-lg outline-none focus:placeholder-transparent'
+          className='text-text-tertiary h-full min-w-0 grow border-none px-2 text-sm outline-none placeholder:text-sm focus:placeholder-transparent sm:pl-5 sm:text-lg'
           placeholder='Type a message...'
           onFocus={() => setShowEmojiPicker(false)}
         />
@@ -102,10 +101,10 @@ const ChatInput = () => {
           type='button'
           onClick={handleSendMessage}
           disabled={aiTyping}
-          className='flex w-20 cursor-pointer justify-center'
+          className='flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center sm:h-auto sm:w-20'
         >
           <i
-            className={`fa-solid fa-paper-plane text-xl transition ${
+            className={`fa-solid fa-paper-plane text-lg transition sm:text-xl ${
               aiTyping ? 'cursor-not-allowed opacity-40' : ''
             }`}
           />

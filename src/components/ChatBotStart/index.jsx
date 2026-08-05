@@ -7,11 +7,13 @@ const ChatBotStart = () => {
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 250);
+
     return () => clearTimeout(t);
   }, []);
 
   const handleStartChat = () => {
     if (chats.length === 0) createChat();
+
     activateChat();
   };
 
@@ -28,21 +30,21 @@ const ChatBotStart = () => {
       <div className='bg-bg-secondary absolute inset-0 opacity-10' />
 
       <div
-        className={`relative flex flex-col items-center gap-8 text-center transition-all duration-700 ease-out ${
+        className={`relative flex flex-col items-center gap-6 px-5 text-center transition-all duration-700 ease-out sm:gap-8 sm:px-0 ${
           mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
         }`}
       >
-        <h1 className='font-exo text-text-primary text-6xl font-bold tracking-widest uppercase'>
+        <h1 className='font-exo text-text-primary text-4xl font-bold tracking-widest uppercase sm:text-6xl'>
           Chat AI
         </h1>
 
-        <p className='text-text-tertiary max-w-md text-base leading-relaxed'>
+        <p className='text-text-tertiary max-w-sm text-sm leading-relaxed sm:max-w-md sm:text-base'>
           A minimal AI workspace. Think, chat, and build ideas instantly.
         </p>
 
         <button
           onClick={handleStartChat}
-          className='from-linear-pink to-linear-blue relative cursor-pointer rounded-2xl bg-linear-to-r px-10 py-4 text-xl font-bold tracking-wider text-black/80 uppercase shadow-[0_0_30px_rgba(201,166,246,0.25)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_60px_rgba(137,180,250,0.35)] active:scale-95'
+          className='from-linear-pink to-linear-blue relative cursor-pointer rounded-2xl bg-linear-to-r px-8 py-3 text-lg font-bold tracking-wider text-black/80 uppercase shadow-[0_0_30px_rgba(201,166,246,0.25)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_60px_rgba(137,180,250,0.35)] active:scale-95 sm:px-10 sm:py-4 sm:text-xl'
         >
           Start Chat
         </button>
